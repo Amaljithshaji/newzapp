@@ -7,7 +7,7 @@ import '../models/article.dart';
 
 
 class SearchRepo{
-  final  String apiKey = '5c544eb5316e4b0780f752c2c50455e3'; //5369166f8a8243db9cb01c749e06adaa
+  final  String apiKey = '5369166f8a8243db9cb01c749e06adaa'; //5369166f8a8243db9cb01c749e06adaa
   final String baseUrl = 'https://newsapi.org/v2';
    Future<List<Article>> searchNews({required String search}) async {
     
