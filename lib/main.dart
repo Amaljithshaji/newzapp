@@ -13,8 +13,8 @@ import 'manager/route_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-void main() async{
-   WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(ArticleModelAdapter());
   await Hive.openBox<ArticleModel>('favorites');
@@ -24,48 +24,45 @@ void main() async{
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  
   @override
   Widget build(BuildContext context) {
-    return  MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider(
-          create: (context) => NewsRepo(),
-        ),
-         RepositoryProvider(
-          create: (context) => SearchRepo(),
-        ),
-       
-      ],
-      child: MultiBlocProvider(
+    return MultiRepositoryProvider(
         providers: [
-          BlocProvider(
-            create: (context) => NewsCubit(repo: NewsRepo()),
+          RepositoryProvider(
+            create: (context) => NewsRepo(),
           ),
-           BlocProvider(
-            create: (context) => SearchCubit(repo: SearchRepo()),
+          RepositoryProvider(
+            create: (context) => SearchRepo(),
           ),
-          BlocProvider(
-          create: (context) => FavoritesCubit(Hive.box<ArticleModel>('favorites')),
-        ),
         ],
-        child:  GetMaterialApp(
-                  title: 'Newz App',
-                  debugShowCheckedModeBanner: false,
-                  theme: ThemeData(
-                    primarySwatch: getMaterialColor(appColors.brandDark),
-                    colorScheme:
-                        ColorScheme.fromSeed(seedColor: appColors.brandDark),
-                    bottomSheetTheme:
-                        const BottomSheetThemeData(backgroundColor: Colors.white),
-                    useMaterial3: true,
-                  ),
-                  getPages: appRoute(),
-                 initialRoute: '/',
-                  //  home: DetailScreen(itemIndex: 1,),
-                
-      ),
-    ));
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => NewsCubit(repo: NewsRepo()),
+            ),
+            BlocProvider(
+              create: (context) => SearchCubit(repo: SearchRepo()),
+            ),
+            BlocProvider(
+              create: (context) =>
+                  FavoritesCubit(Hive.box<ArticleModel>('favorites')),
+            ),
+          ],
+          child: GetMaterialApp(
+            title: 'Newz App',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primarySwatch: getMaterialColor(appColors.brandDark),
+              colorScheme: ColorScheme.fromSeed(seedColor: appColors.brandDark),
+              bottomSheetTheme:
+                  const BottomSheetThemeData(backgroundColor: Colors.white),
+              useMaterial3: true,
+            ),
+            getPages: appRoute(),
+            initialRoute: '/',
+            //  home: DetailScreen(itemIndex: 1,),
+          ),
+        ));
   }
 }
-

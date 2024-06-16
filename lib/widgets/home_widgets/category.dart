@@ -68,41 +68,49 @@ class _CategoryState extends State<Category> {
                       ? const CircularProgressIndicator()
                       : const Text('No articles found.'),
                 )
-              : ListView(
-                  controller: _scrollController,
-                  children: [
-                    Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 20),
-                        color: Colors.white,
-                        child: ResponsiveGridList(
-                            listViewBuilderOptions: ListViewBuilderOptions(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics()),
-                            minItemWidth: 70,
-                            maxItemsPerRow: 1,
-                            verticalGridSpacing: 10,
-                            horizontalGridSpacing: 10,
-                            children: List.generate(
-                                _calculateListItemCount(state), (index) {
-                              if (index < _articles.length) {
-                                final news = _articles[index];
-                                return InkWell(
-                                  onTap: () {
-                                    Get.toNamed('/detailsScreen',
-                                        arguments: {'article': news});
-                                  },
-                                  child: NewzCard(
-                                    article: news,
-                                  ),
-                                );
-                              } else {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
-                            })))
-                  ],
+              : RefreshIndicator(
+                  onRefresh: () async {
+                    await context
+                        .read<NewsCubit>()
+                        .getNews(category: widget.category);
+                  },
+                  child: ListView(
+                    controller: _scrollController,
+                    children: [
+                      Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 20),
+                          color: Colors.white,
+                          child: ResponsiveGridList(
+                              listViewBuilderOptions: ListViewBuilderOptions(
+                                  shrinkWrap: true,
+                                  physics:
+                                      const NeverScrollableScrollPhysics()),
+                              minItemWidth: 70,
+                              maxItemsPerRow: 1,
+                              verticalGridSpacing: 10,
+                              horizontalGridSpacing: 10,
+                              children: List.generate(
+                                  _calculateListItemCount(state), (index) {
+                                if (index < _articles.length) {
+                                  final news = _articles[index];
+                                  return InkWell(
+                                    onTap: () {
+                                      Get.toNamed('/detailsScreen',
+                                          arguments: {'article': news});
+                                    },
+                                    child: NewzCard(
+                                      article: news,
+                                    ),
+                                  );
+                                } else {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                              })))
+                    ],
+                  ),
                 );
         }
       },
@@ -127,75 +135,3 @@ class _CategoryState extends State<Category> {
     super.dispose();
   }
 }
-
-
-
-
-
-// DropdownButtonHideUnderline(
-//                             child: DropdownButton(
-//                               value: selectValue,
-//                               elevation: 0,
-//                               iconEnabledColor: Colors.black,
-//                               focusColor: Colors.black,
-//                               dropdownColor:
-//                                   Color.fromARGB(255, 21, 21, 21),
-//                               borderRadius: BorderRadius.all(
-//                                   Radius.circular(10)),
-//                               enableFeedback: true,
-//                               items: [
-//                                 DropdownMenuItem<String>(
-//                                   enabled: false,
-//                                   child: TextButton(
-//                                     onPressed: () {
-//                                       // launchUrl(
-//                                       //     Uri.parse(HomeProvider
-//                                       //             .responsedata
-//                                       //             ?.articles?[index]
-//                                       //             .url
-//                                       //             .toString() ??
-//                                       //         ''),
-//                                       //     mode: LaunchMode
-//                                       //         .inAppWebView);
-//                                     },
-//                                     child: Text(
-//                                       'Read more',
-//                                       style: TextStyle(
-//                                           color: Colors.white),
-//                                     ),
-//                                   ),
-//                                   value: 'read more',
-//                                 ),
-//                                 DropdownMenuItem<String>(
-//                                   child: TextButton(
-//                                     onPressed: () {
-//                                       // Share.share(HomeProvider
-//                                       //         .responsedata
-//                                       //         ?.articles?[index]
-//                                       //         .url
-//                                       //         .toString() ??
-//                                       //     "www.google.com");
-//                                     },
-//                                     child: Text(
-//                                       'Share',
-//                                       style: TextStyle(
-//                                           color: Colors.white),
-//                                     ),
-//                                   ),
-//                                   value: 'Share',
-//                                 )
-//                               ],
-//                               onChanged: (newValue) {
-//                                 selectValue = newValue;
-//                                 setState(() {});
-//                               },
-//                               icon: Icon(
-//                                 Icons.more_vert,
-//                                 color: Colors.white,
-//                                 size: 20,
-//                               ),
-//                             ),
-//                           )
-
-
-

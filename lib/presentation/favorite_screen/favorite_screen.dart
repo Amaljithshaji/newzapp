@@ -7,7 +7,6 @@ import 'package:newzapp/manager/font_manager.dart';
 import 'package:newzapp/widgets/newz_card.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 
-
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
 
@@ -21,7 +20,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     BlocProvider.of<FavoritesCubit>(context).loadFavorites();
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,33 +39,38 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               child: CircularProgressIndicator(),
             );
           } else if (state is FavoritesLoaded) {
-            
-            return ListView(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              children: [
-                ResponsiveGridList(
-                  listViewBuilderOptions: ListViewBuilderOptions(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics()),
-                  minItemWidth: 70,
-                  maxItemsPerRow: 1,
-                  verticalGridSpacing: 10,
-                  horizontalGridSpacing: 10,
-                  children: List.generate(state.favorites.length, (index) {
-                    final articleModel = state.favorites[index];
-                    final article = articleModel.toArticle();
-                    return InkWell(
-                      onTap: () {
-                        Get.toNamed('/detailsScreen',
-                            arguments: {'article': article});
-                      },
-                      child: NewzCard(
-                        article: article,
-                      ),
-                    );
-                  }),
-                )
-              ],
+            return RefreshIndicator(
+              onRefresh: () async {
+                BlocProvider.of<FavoritesCubit>(context).loadFavorites();
+              },
+              child: ListView(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                children: [
+                  ResponsiveGridList(
+                    listViewBuilderOptions: ListViewBuilderOptions(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics()),
+                    minItemWidth: 70,
+                    maxItemsPerRow: 1,
+                    verticalGridSpacing: 10,
+                    horizontalGridSpacing: 10,
+                    children: List.generate(state.favorites.length, (index) {
+                      final articleModel = state.favorites[index];
+                      final article = articleModel.toArticle();
+                      return InkWell(
+                        onTap: () {
+                          Get.toNamed('/detailsScreen',
+                              arguments: {'article': article});
+                        },
+                        child: NewzCard(
+                          article: article,
+                        ),
+                      );
+                    }),
+                  )
+                ],
+              ),
             );
           } else if (state is FavoritesError) {
             return Center(

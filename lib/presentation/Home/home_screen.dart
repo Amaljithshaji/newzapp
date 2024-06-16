@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return DefaultTabController(
         length: 7,
         child: Scaffold(
-          backgroundColor: Colors.white,
+            backgroundColor: Colors.white,
             appBar: AppBar(
               automaticallyImplyLeading: false,
               backgroundColor: appColors.brandDark,

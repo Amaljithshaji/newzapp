@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:newzapp/presentation/favorite_screen/favorite_screen.dart';
@@ -8,7 +7,6 @@ import '../../manager/color_manager.dart';
 import '../../manager/font_manager.dart';
 import 'home_screen.dart';
 
-
 class Home extends StatelessWidget {
   Home({super.key});
   final HomeController homeController = Get.put(HomeController());
@@ -16,9 +14,8 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       const HomeScreen(),
-       const SearchScreen(),
-       const FavoriteScreen()
-      
+      const SearchScreen(),
+      const FavoriteScreen()
     ];
     return Obx(
       () => Scaffold(
@@ -51,6 +48,5 @@ List<IconData> bottomBarIcons = [
   Icons.home,
   Icons.search_rounded,
   Icons.favorite
-  
 ];
-List<String> labels = ['Home','Search','Favorite'];
+List<String> labels = ['Home', 'Search', 'Favorite'];
